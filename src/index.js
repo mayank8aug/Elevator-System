@@ -68,7 +68,7 @@ class ElevatorManager {
         if (!this.pendingElevatorRequests[requestedAtFloor]) {
             this.pendingElevatorRequests[requestedAtFloor] = {};
         }
-        this.pendingElevatorRequests[requestedAtFloor][direction] = 1;
+        this.pendingElevatorRequests[requestedAtFloor][direction] = true;
     }
 
     getElevatorById(id) {
