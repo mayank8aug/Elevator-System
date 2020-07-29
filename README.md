@@ -39,7 +39,7 @@ System Behaviour:
 2. All the installed elevators will be initially stationed at 0th Floor.
 3. When a request has been raised for an elevatior from floor X. The ElevatorManager will receive it via handleElevatorRequest(requestedAtFloor, direction) function. The request will contain the floor from where the request has been inititated and the direction where the passenger wants to move.
 4. ElevatorManager will see if there is already a moving elevator towards the requested floor and going in the requested direction.
-a) If yes, then it will add this request in the pending request along with the floor and direction. Once any of the floor reaches to X - 1 (or X + 1 based on the direction) floor and moving towards the expected direction, that elevator is supposed to serve that request. The requested floor will be added to the destinationFloors list of that elevator.
+a) If yes, then it will add this request in the pending request along with the floor and direction. Once any of the floor reaches to X - 1 (or X + 1 based on the direction) floor and moving towards the expected direction, that elevator is supposed to serve that request. The requested floor will be added to the destinationFloors list of that elevator in the sorted order of floor occurence and movement direction.
 b) If no, the ElevatorManager will check for nearest elevator in the stationary position and assign that elevator to the request.
 c) Else it will wait for any of the elevator to be available either being stationed or moving towards the request floor and then assin the elevator to the request.
 5. On every movement of the elevator, an event will be sent to the ElevatorManager, and the manager will see if this elevator can now be to any of the pending request.
