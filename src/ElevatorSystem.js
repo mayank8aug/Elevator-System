@@ -129,7 +129,9 @@ class Elevator {
             // Move it a floor up if the direction  is upwards (+1) and a floor down if the direction  is downwards (-1)
             this.currentFloor = this.currentFloor < this.destinationFloors[0] ? this.currentFloor + 1 : this.currentFloor - 1;
             if (this.currentFloor === this.destinationFloors[0]) {
-                this.reachedNextDestination();     
+                // reached the next stop
+                this.destinationFloors.shift();
+                this.isStationary = !this.destinationFloors.length;    
             }
             // Update Elevator Manager about the state change
             this.elevatorManager.handleElevatorEvent({
@@ -139,11 +141,6 @@ class Elevator {
                 direction: this.direction
             });
         }
-    }
-
-    reachedNextDestination() {
-        this.destinationFloors.shift();
-        this.isStationary = !this.destinationFloors.length;
     }
 
 }
