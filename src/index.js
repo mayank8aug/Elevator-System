@@ -115,11 +115,8 @@ class Elevator {
             this.destinationFloors.push(floor);
         } else {
             this.destinationFloors.push(floor);
-            if (this.currentFloor < this.destinationFloors[0]) {
-                this.destinationFloors.sort((f1, f2) => f1 - f2);
-            } else {
-                this.destinationFloors.sort((f1, f2) => f2 - f1);    
-            }
+            const sortAsc = this.currentFloor < this.destinationFloors[0];
+            this.destinationFloors.sort((f1, f2) => sortAsc ? f1 - f2 : f2 - f1);
         }
         this.direction = this.currentFloor < this.destinationFloors[0] ? 1 : -1;
         this.isStationary = false;
