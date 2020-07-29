@@ -1,5 +1,6 @@
 # Elevator-System
 
+System:
 
 Entity: ElevatorManager
 
@@ -31,6 +32,7 @@ Methods:
 2. move() - Moves the elevator one floor up or down based on the moving direction
 
 
+
 System Behaviour:
 
 1. Initially, an instance of ElevatorManager will be created and multiple elevators will be installed with the manager instance.
@@ -41,3 +43,17 @@ a) If yes, then it will add this request in the pending request along with the f
 b) If no, the ElevatorManager will check for nearest elevator in the stationary position and assign that elevator to the request.
 c) Else it will wait for any of the elevator to be available either being stationed or moving towards the request floor and then assin the elevator to the request.
 5. On every movement of the elevator, an event will be sent to the ElevatorManager, and the manager will see if this elevator can now be to any of the pending request.
+
+
+
+Steps to Get Started:
+1. Execute ElevatorSystem.js code on any of the js console like browser console or https://jsconsole.com/
+2. A global instance of elevatorManager will be initialized after Step 1 with 3 elevators pre installed.
+3. To add an elevator, execute elevatorManager.addElevator(id). id must be unique.
+4. To request for an elevator, execute handleElevatorRequest(floor, direction). floor can be any number and direction can be 1 (for upward movement) and -1 (for downward movement).
+5. To see the current state of all the installed elevators, execute elevatorManager.getAllElevatorsState()
+6. To fetch an elevator based on it id, execute elevatorManager.getElevatorById(id)
+7. To see all unassigned/pending requests, execute elevatorManager.getAllPendingRequests()
+8. To move an elevator, get the elevator instance from the manager and trigger move as below
+    var elevatorL1 = elevatorManager.getElevatorById(1);
+    elevatorL1.move(); 
