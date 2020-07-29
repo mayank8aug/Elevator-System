@@ -154,10 +154,13 @@ class Elevator {
 
 }
 
-var em = new ElevatorManager();
-em.addElevator(1);
-em.addElevator(2);
-em.addElevator(3);
-em.handleElevatorRequest(3, 1);
-em.handleElevatorRequest(4, 1);
-em.handleElevatorRequest(8, -1)
+var elevatorManager = (function installElevatorsWithInitialRequests() {
+    var em = new ElevatorManager();
+    for (let i = 0; i < 5; i++) {
+        em.addElevator(i + 1);
+    }
+    em.handleElevatorRequest(3, 1);
+    em.handleElevatorRequest(4, 1);
+    em.handleElevatorRequest(8, -1);
+    return em;
+})();
