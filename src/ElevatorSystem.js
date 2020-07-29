@@ -9,7 +9,7 @@ class ElevatorManager {
     }
 
     assignElevator(elevator, floor) {
-        elevator.addDestination(floor);
+        elevator.addDestination(floor, true);
     }
 
     handleElevatorEvent(event) {
@@ -112,13 +112,13 @@ class Elevator {
         this.isStationary = true;
     }
 
-    addDestination(floor) {
-        this.destinationFloors.push(floor);
+    addDestination(floor, isSystemAction = false) {
+        this.destinationFloors.push({ floor, isSystemAction });
         if (this.destinationFloors.length > 1) {
-            const sortAsc = this.currentFloor < this.destinationFloors[0];
-            this.destinationFloors.sort((f1, f2) => sortAsc ? f1 - f2 : f2 - f1);
+            const sortAsc = this.currentFloor < this.destinationFloors[0].floor;
+            this.destinationFloors.sort((f1, f2) => sortAsc ? f1.floor - f2.floor : f2.floor - f1.floor);
         }
-        this.direction = this.currentFloor < this.destinationFloors[0] ? 1 : -1;
+        this.direction = this.currentFloor < this.destinationFloors[0].floor ? 1 : -1;
         this.isStationary = false;
     }
 
@@ -127,11 +127,12 @@ class Elevator {
             console.log('No destination floor is pending in queue for this elevator');
         } else {
             // Move it a floor up if the direction  is upwards (+1) and a floor down if the direction  is downwards (-1)
-            this.currentFloor = this.currentFloor < this.destinationFloors[0] ? this.currentFloor + 1 : this.currentFloor - 1;
-            if (this.currentFloor === this.destinationFloors[0]) {
+            this.currentFloor = this.currentFloor < this.destinationFloors[0].floor ? this.currentFloor + 1 : this.currentFloor - 1;
+            if (this.currentFloor === this.destinationFloors[0].floor) {
                 // reached the next stop
+                const { isSystemAction } = this.destinationFloors[0];
                 this.destinationFloors.shift();
-                this.isStationary = !this.destinationFloors.length;    
+                this.isStationary = isSystemAction ? false : !this.destinationFloors.length;    
             }
             // Update Elevator Manager about the state change
             this.elevatorManager.handleElevatorEvent({
