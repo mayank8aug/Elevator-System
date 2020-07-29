@@ -1,6 +1,6 @@
 # Elevator-System
 
-System:
+System Components:
 
 Entity: ElevatorManager
 
