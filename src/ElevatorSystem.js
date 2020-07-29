@@ -8,6 +8,16 @@ class ElevatorManager {
         this.elevators.push(new Elevator(elevatorId, this));
     }
 
+    removeElevator(elevatorId) {
+        const index = this.elevators.findIndex(elevator => elevator.id === elevatorId);
+        if (index < 0) {
+            console.log('Invalid Elevator Id...');
+        } else {
+            this.elevators.splice(index, 1);
+            console.log(`Elevator with id ${elevatorId} has been removed successfully`);
+        }
+    }
+
     assignElevator(elevator, floor) {
         elevator.addDestination(floor, true);
     }
