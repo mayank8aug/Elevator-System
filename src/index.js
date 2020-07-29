@@ -85,6 +85,19 @@ class ElevatorManager {
         }
     }
 
+    getAllPendingRequests() {
+        const floorsRequested = Object.keys(this.pendingElevatorRequests);
+        if (!floorsRequested.length) {
+            console.log('No pending request to be served...');
+        } else {
+            for(let requestedFloor in this.pendingElevatorRequests) {
+                for(let direction in requestedFloor) {
+                    console.log(`Request pending from floor ${requestedFloor} for ${direction ? 'upward' : 'downward'} direction`);
+                }
+            }
+        }
+    }
+
 }
 
 class Elevator {
@@ -112,7 +125,7 @@ class Elevator {
         this.isStationary = false;
     }
 
-    moveLift() {
+    move() {
         if (!this.destinationFloors.length) {
             console.log('No destination floor is pending in queue for this elevator');
         } else {
