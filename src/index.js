@@ -16,15 +16,24 @@ class ElevatorManager {
         const { elevatorId, isStationary, currentFloor, direction } = event;
         if (!isStationary) {
             // If next floor is the requested one, assign this elevator to that request
-            if (this.pendingElevatorRequests[currentFloor + direction]) {
-                this.assignElevator(this.elevators.find(elevator => elevator.id === elevatorId), currentFloor + direction);
+            const nextFloor = currentFloor + direction;
+            if (this.pendingElevatorRequests[nextFloor] && this.pendingElevatorRequests[nextFloor][direction]) {
+                this.assignElevator(this.elevators.find(elevator => elevator.id === elevatorId), nextFloor);
+                delete this.pendingElevatorRequests[nextFloor][direction];
             }
         } else {
             // If any of the elevators comes to stationary, assign it to the the pending request
             const firstPendingRequestFloor = Number(Object.keys(this.pendingElevatorRequests)[0]);
             if (firstPendingRequestFloor) {
                 this.assignElevator(this.elevators.find(elevator => elevator.id === elevatorId), firstPendingRequestFloor);
-                delete this.pendingElevatorRequests[firstPendingRequestFloor];
+                if (this.pendingElevatorRequests[firstPendingRequestFloor][1]) {
+                    delete this.pendingElevatorRequests[firstPendingRequestFloor][1];
+                } else {
+                    delete this.pendingElevatorRequests[firstPendingRequestFloor][-1];    
+                }
+                if (!Object.keys(this.pendingElevatorRequests[firstPendingRequestFloor]).length) {
+                    delete this.pendingElevatorRequests[firstPendingRequestFloor];    
+                }
             }
         }
     }
@@ -81,7 +90,7 @@ class ElevatorManager {
 class Elevator {
     constructor(id, elevatorManager) {
         this.id = id;
-        this.currentFloor = Math.floor(Math.random() * 6); // Install elevator at a random floor between floor 0 & 5
+        this.currentFloor = 0;
         this.destinationFloors = [];
         this.elevatorManager = elevatorManager;
         this.direction = 0;
