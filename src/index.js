@@ -39,6 +39,10 @@ class ElevatorManager {
     }
 
     handleElevatorRequest(requestedAtFloor, direction) {
+        // Ignore if a similar request is already pending
+        if (this.pendingElevatorRequests[requestedAtFloor] && this.pendingElevatorRequests[requestedAtFloor][direction]) {
+            return;
+        }
         // check if any elevator already in motion
         const elevatorTowardsTheFloor = this.elevators.some(elevator => !elevator.isStationary && elevator.direction === direction);
         if (!elevatorTowardsTheFloor) {
