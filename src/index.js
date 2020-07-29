@@ -15,16 +15,21 @@ class ElevatorManager {
     handleElevatorEvent(event) {
         const { elevatorId, isStationary, currentFloor, direction } = event;
         if (!isStationary) {
+            // If next floor is the requested one, assign this elevator to that request
             if (this.pendingElevatorRequests[currentFloor + direction]) {
-                this.assignElevator(this.elevators.find(elevatorId), currentFloor + direction);
+                this.assignElevator(this.elevators.find(elevator => elevator.id === elevatorId), currentFloor + direction);
             }
         } else {
-            this.assignElevator(this.elevators.find(elevatorId), Object.keys(this.pendingElevatorRequests)[0]);
+            // If any of the elevators comes to stationary, assign it to the the pending request
+            const firstPendingRequestFloor = Number(Object.keys(this.pendingElevatorRequests)[0]);
+            if (firstPendingRequestFloor) {
+                this.assignElevator(this.elevators.find(elevator => elevator.id === elevatorId), firstPendingRequestFloor);
+                delete this.pendingElevatorRequests[firstPendingRequestFloor];
+            }
         }
     }
 
     handleElevatorRequest(requestedAtFloor, direction) {
-        debugger;
         // check if any elevator already in motion
         const elevatorTowardsTheFloor = this.elevators.some(elevator => !elevator.isStationary && elevator.direction === direction);
         if (!elevatorTowardsTheFloor) {
@@ -43,21 +48,40 @@ class ElevatorManager {
                     }
                 }
             }
-            this.assignElevator(minDistanceElevator, requestedAtFloor);
-            return;
+            if (minDistanceElevator) {
+                this.assignElevator(minDistanceElevator, requestedAtFloor);
+                return;
+            }
         }
-        // add to elevator request from a floor and in the expected firection
+        // add to elevator request from a floor and in the expected direction
         if (!this.pendingElevatorRequests[requestedAtFloor]) {
             this.pendingElevatorRequests[requestedAtFloor] = {};
         }
         this.pendingElevatorRequests[requestedAtFloor][direction] = 1;
     }
+
+    getElevatorById(id) {
+        const elevator = this.elevators.find(elevator => elevator.id === id);
+        return elevator || 'Invalid Elevator Id';
+    }
+
+    getAllElevatorsState() {
+        if (!this.elevators.length) {
+            console.log('No Elevator Installed...'); // return 'No Elevator Installed...';
+        } else {
+            for (let i = 0, len = this.elevators.length; i < len; i++) {
+                const { id, currentFloor, isStationary } = this.elevators[i];
+                console.log(`Elevator ${id} is ${isStationary ? 'stationed' : 'moving'} and at floor ${currentFloor}`);
+            }
+        }
+    }
+
 }
 
 class Elevator {
     constructor(id, elevatorManager) {
         this.id = id;
-        this.currentFloor = 0;
+        this.currentFloor = Math.floor(Math.random() * 6); // Install elevator at a random floor between floor 0 & 5
         this.destinationFloors = [];
         this.elevatorManager = elevatorManager;
         this.direction = 0;
@@ -79,12 +103,19 @@ class Elevator {
         this.isStationary = false;
     }
 
-    reachedNextDestination() {
+    moveLift() {
         if (!this.destinationFloors.length) {
-            console.log('Invalid operation');
+            console.log('No destination floor is pending in queue for this elevator');
         } else {
-            this.currentFloor = this.destinationFloors.shift();
-            this.isStationary = !this.destinationFloors.length;
+            if (this.currentFloor < this.destinationFloors[0]) {
+                this.currentFloor = this.currentFloor + 1; // Move it a floor up if the direction  is upwards (+1)
+            } else if (this.currentFloor > this.destinationFloors[0]) {
+                this.currentFloor = this.currentFloor - 1; // Move it a floor down if the direction  is downwards (-1)
+            }
+            if (this.currentFloor === this.destinationFloors[0]) {
+                this.reachedNextDestination();     
+            }
+            // Update Elevator Manager about the state change
             this.elevatorManager.handleElevatorEvent({
                 elevatorId: this.id,
                 isStationary: this.isStationary,
@@ -92,6 +123,11 @@ class Elevator {
                 direction: this.direction
             })
         }
+    }
+
+    reachedNextDestination() {
+        this.destinationFloors.shift();
+        this.isStationary = !this.destinationFloors.length;
     }
 
 }
@@ -102,3 +138,4 @@ em.addElevator(2);
 em.addElevator(3);
 em.handleElevatorRequest(3, 1);
 em.handleElevatorRequest(4, 1);
+em.handleElevatorRequest(8, -1)
