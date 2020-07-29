@@ -30,7 +30,10 @@ class ElevatorManager {
             const pendingNextFloor = this.pendingElevatorRequests[nextFloor];
             if (pendingNextFloor && pendingNextFloor[direction]) {
                 this.assignElevator(this.elevators.find(elevator => elevator.id === elevatorId), nextFloor);
-                delete this.pendingNextFloor[direction];
+                delete pendingNextFloor[direction];
+                if (!Object.keys(pendingNextFloor).length) {
+                    delete this.pendingElevatorRequests[nextFloor];    
+                }
             }
         } else {
             // If any of the elevators comes to stationary, assign it to the the pending request
