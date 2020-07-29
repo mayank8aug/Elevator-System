@@ -47,6 +47,7 @@ c) Else it will wait for any of the elevator to be available either being statio
 
 
 Steps to Get Started:
+
 1. Execute ElevatorSystem.js code on any of the js console like browser console or https://jsconsole.com/
 2. A global instance of elevatorManager will be initialized after Step 1 with 3 elevators pre installed.
 3. To add an elevator, execute elevatorManager.addElevator(id). id must be unique.
