@@ -32,7 +32,7 @@ class ElevatorManager {
                 this.assignElevator(this.elevators.find(elevator => elevator.id === elevatorId), nextFloor);
                 delete pendingNextFloor[direction];
                 if (!Object.keys(pendingNextFloor).length) {
-                    delete this.pendingElevatorRequests[nextFloor];    
+                    delete this.pendingElevatorRequests[nextFloor];
                 }
             }
         } else {
@@ -43,7 +43,7 @@ class ElevatorManager {
                 const requestedFloor = this.pendingElevatorRequests[firstPendingRequestFloor];
                 delete requestedFloor[requestedFloor[1] ? 1 : -1];
                 if (!Object.keys(requestedFloor).length) {
-                    delete this.pendingElevatorRequests[firstPendingRequestFloor];    
+                    delete this.pendingElevatorRequests[firstPendingRequestFloor];
                 }
             }
         }
@@ -54,8 +54,8 @@ class ElevatorManager {
         if (this.pendingElevatorRequests[requestedAtFloor] && this.pendingElevatorRequests[requestedAtFloor][direction]) {
             return;
         }
-        // check if any elevator already in motion
-        const elevatorTowardsTheFloor = this.elevators.some(elevator => !elevator.isStationary && elevator.direction === direction && (direction ? elevator.currentFloor < requestedAtFloor : elevator.currentFloor > requestedAtFloor));
+        // check if any elevator already in motion towards the requested direction
+        const elevatorTowardsTheFloor = this.elevators.find(elevator => !elevator.isStationary && elevator.direction === direction && (direction ? elevator.currentFloor <= requestedAtFloor : elevator.currentFloor >= requestedAtFloor));
         if (!elevatorTowardsTheFloor) {
             // find nearest stationed elevator
             let min = Number.MAX_VALUE;
@@ -105,8 +105,8 @@ class ElevatorManager {
         if (!floorsRequested.length) {
             console.log('No pending request to be served...');
         } else {
-            for(let requestedFloor in this.pendingElevatorRequests) {
-                for(let direction in requestedFloor) {
+            for (let requestedFloor in this.pendingElevatorRequests) {
+                for (let direction in requestedFloor) {
                     console.log(`Request pending from floor ${requestedFloor} for ${direction ? 'upward' : 'downward'} direction`);
                 }
             }
@@ -145,7 +145,7 @@ class Elevator {
                 // reached the next stop
                 const { isSystemAction } = this.destinationFloors[0];
                 this.destinationFloors.shift();
-                this.isStationary = isSystemAction ? false : !this.destinationFloors.length;    
+                this.isStationary = isSystemAction ? false : !this.destinationFloors.length;
             }
             // Update Elevator Manager about the state change
             this.elevatorManager.handleElevatorEvent({
