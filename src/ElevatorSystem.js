@@ -164,8 +164,5 @@ var elevatorManager = (function installElevatorsWithInitialRequests() {
     for (let i = 0; i < 3; i++) {
         em.addElevator(i + 1);
     }
-    em.handleElevatorRequest(3, 1);
-    em.handleElevatorRequest(4, 1);
-    em.handleElevatorRequest(8, -1);
     return em;
 })();
