@@ -1,5 +1,21 @@
 # Elevator-System
 
+
+Problem Statement:
+
+Design a Building Elevator System. The system must be capable of handling the requests being raised from a floor to go in upward or downward direction. The request must be fulfilled based on the availability of the elevators in that building.
+
+
+
+Notes & Assumptions:
+
+1. The implementation has been done for one building only. So there will be a Elevator Manager managing all the elevators installed in the building.
+2. For the sake of testing the flow, the elevator movement can be triggered manually by the elevator instance which can be fetched from the manager instance.
+3. The main focus of the implementation was around serving the requests, so the movement of an elevator from inside the elevator is not considered with the current implementation.
+4. The active or dead state of an elevator is also not considered with the current implementation.
+
+
+
 Steps to Get Started:
 
 1. Execute ElevatorSystem.js code on any of the js console like browser console or https://jsconsole.com/
@@ -73,3 +89,12 @@ b) for the elevator movement - O(K)
 c) to get an elevator instance - O(N)
 d) to get all the pending requests - O(K)
 e) to get all the elevator states - O(K)
+
+
+
+Future Work or Enhancements:
+
+1. The sytem can be extended to support multiple buildings and managers per building.
+2. Improvements can be done around event based implementation.
+3. Elevators can be improved to have floors numbers so that a request can be made by the users inside the elevator.
+4. Health check mechanism can be implemented which will help the manager to keep a track of active or dead elevators.
