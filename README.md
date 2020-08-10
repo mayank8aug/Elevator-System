@@ -84,10 +84,15 @@ M -> No. of floors in the building
 K -> No. of requests - This can go maximum till 2M (one per each direction from every floor)
 
 Time complexity
+
 a) to serve a new request, will be O(N). For K requests, it will be O(N x K).
+
 b) for the elevator movement - O(K)
+
 c) to get an elevator instance - O(N)
+
 d) to get all the pending requests - O(K)
+
 e) to get all the elevator states - O(K)
 
 
